@@ -48,3 +48,29 @@
 2025-08-28 20:56:44,861 - Main-ETL - INFO - === START LOAD PHASE ===
 2025-08-28 20:56:44,901 - Main-ETL - INFO - === LOAD PHASE COMPLETADA ===
 2025-08-28 20:56:44,902 - Main-ETL - INFO - === PIPELINE ETL COMPLETADO ===
+2025-08-29 12:04:07,730 - Main-ETL - INFO - === INICIO PIPELINE ETL - SpaceParts ===
+2025-08-29 12:04:07,731 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_spaceparts.py --limit 3000
+2025-08-29 12:04:13,401 - ETL-SpaceParts - INFO - Conexión establecida con la base: SpacePartsCoDW
+2025-08-29 12:04:13,401 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Customers (limit=3000)
+2025-08-29 12:04:19,518 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Customers.csv (filas: 3000)
+2025-08-29 12:04:19,518 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Products (limit=3000)
+2025-08-29 12:04:28,342 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Products.csv (filas: 3000)
+2025-08-29 12:04:28,342 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: fact.Invoices (limit=3000)
+2025-08-29 12:04:32,492 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\fact_Invoices.csv (filas: 3000)
+2025-08-29 12:04:32,828 - ETL-SpaceParts - INFO - Extracción completada con éxito para todas las tablas solicitadas
+2025-08-29 12:04:32,950 - Main-ETL - INFO - [OK] etl_spaceparts.py completado.
+2025-08-29 12:04:32,950 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_curated.py --limit 3000
+2025-08-29 12:04:33,426 - ETL-Curated - INFO - [START] Procesando dim_Customers desde data\raw\dim_Customers.csv (limit=3000)
+2025-08-29 12:04:33,475 - ETL-Curated - INFO - Perfil [dim_Customers] -> filas: 3000, columnas: 10, nulos totales: 0, duplicados: 0
+2025-08-29 12:04:33,768 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Customers_curated.csv y data\curated\dim_Customers_curated.parquet
+2025-08-29 12:04:33,768 - ETL-Curated - INFO - [START] Procesando dim_Products desde data\raw\dim_Products.csv (limit=3000)
+2025-08-29 12:04:33,841 - ETL-Curated - INFO - Perfil [dim_Products] -> filas: 3000, columnas: 18, nulos totales: 0, duplicados: 0
+2025-08-29 12:04:33,872 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Products_curated.csv y data\curated\dim_Products_curated.parquet
+2025-08-29 12:04:33,872 - ETL-Curated - INFO - [START] Procesando fact_Invoices desde data\raw\fact_Invoices.csv (limit=3000)
+2025-08-29 12:04:33,903 - ETL-Curated - INFO - Perfil [fact_Invoices] -> filas: 3000, columnas: 20, nulos totales: 0, duplicados: 0
+2025-08-29 12:04:33,932 - ETL-Curated - INFO - [OK] Guardado data\curated\fact_Invoices_curated.csv y data\curated\fact_Invoices_curated.parquet
+2025-08-29 12:04:33,932 - ETL-Curated - INFO - [END] ETL curated completado correctamente.
+2025-08-29 12:04:33,999 - Main-ETL - INFO - [OK] etl_curated.py completado.
+2025-08-29 12:04:33,999 - Main-ETL - INFO - === START LOAD PHASE ===
+2025-08-29 12:04:34,050 - Main-ETL - INFO - === LOAD PHASE COMPLETADA ===
+2025-08-29 12:04:34,050 - Main-ETL - INFO - === PIPELINE ETL COMPLETADO ===
