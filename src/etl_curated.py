@@ -85,7 +85,7 @@ for table in tables:
                 f"(limit={row_limit if row_limit else 'ALL'})")
 
     # --------------------------------------------------------
-    # Paso 1: Cargo el CSV crudo
+    # Paso 1: Cargo el CSV crudo (RAW)
     # --------------------------------------------------------
     try:
         df = pd.read_csv(raw_path, encoding="utf-8-sig")
@@ -106,7 +106,7 @@ for table in tables:
         # Estandarizo nombres de columnas a snake_case
         df.columns = [c.strip().replace(" ", "_").lower() for c in df.columns]
 
-        # Renombro columnas claves
+        # Renombro columnas claves (más amigables para BI)
         rename_map = {
             "customerid": "id_cliente",
             "firstname": "nombre",
@@ -120,6 +120,7 @@ for table in tables:
             df["id_cliente"] = df["id_cliente"].astype(int)
 
     elif table == "dim_Products":
+        # Estandarizo nombres de columnas
         df.columns = [c.strip().replace(" ", "_").lower() for c in df.columns]
 
         # Normalizo precios a numérico
@@ -127,9 +128,14 @@ for table in tables:
             df["price"] = pd.to_numeric(df["price"], errors="coerce").round(2)
 
     elif table == "fact_Invoices":
+        # =====================================================
+        # Transformaciones de la tabla de hechos (Fact Invoices)
+        # =====================================================
         df.columns = [c.strip().replace(" ", "_").lower() for c in df.columns]
 
-        # Identifico columna de fecha
+        # ------------------------------------------
+        # Paso: Identifico y convierto columna de fecha
+        # ------------------------------------------
         date_cols = [c for c in df.columns if "date" in c or "orderdate" in c or "invoice_date" in c]
         if date_cols:
             col = date_cols[0]
@@ -137,15 +143,39 @@ for table in tables:
             df = df.dropna(subset=[col])
             df["date_iso"] = df[col].dt.strftime("%Y-%m-%d")
 
-        # Quantity a entero
+        # ------------------------------------------
+        # Paso: Limpieza de campos numéricos
+        # ------------------------------------------
         if "quantity" in df.columns:
             df["quantity"] = pd.to_numeric(df["quantity"], errors="coerce").fillna(0).astype(int)
-        # UnitPrice a decimal
         if "unitprice" in df.columns:
             df["unitprice"] = pd.to_numeric(df["unitprice"], errors="coerce").round(2)
 
+        # Valores originales que venían negativos → los normalizo
+        if "net_invoice_value" in df.columns:
+            df["net_invoice_value"] = pd.to_numeric(df["net_invoice_value"], errors="coerce").fillna(0)
+            df["net_invoice_value"] = df["net_invoice_value"].abs()
+
+        if "net_invoice_cogs" in df.columns:
+            df["net_invoice_cogs"] = pd.to_numeric(df["net_invoice_cogs"], errors="coerce").fillna(0)
+            df["net_invoice_cogs"] = df["net_invoice_cogs"].abs()
+
+        # ------------------------------------------
+        # Paso: Columnas derivadas para BI (más claridad)
+        # ------------------------------------------
+        # Gross sales = quantity * unit price
+        if "quantity" in df.columns and "unitprice" in df.columns:
+            df["gross_invoice_value"] = (df["quantity"] * df["unitprice"]).round(2)
+        else:
+            # fallback por si no vienen columnas separadas
+            df["gross_invoice_value"] = df.get("net_invoice_value", 0)
+
+        # Profit = Gross invoice - COGS (ya positivizados)
+        if "gross_invoice_value" in df.columns and "net_invoice_cogs" in df.columns:
+            df["profit"] = df["gross_invoice_value"] - df["net_invoice_cogs"]
+
     # --------------------------------------------------------
-    # Paso 3: Perfilado rápido
+    # Paso 3: Perfilado rápido (útil para storytelling demo)
     # --------------------------------------------------------
     profile = quick_profile(df)
     logger.info(f"Perfil [{table}] -> filas: {profile['rows']}, "
@@ -172,7 +202,13 @@ logger.info("[END] ETL curated completado correctamente.")
 # 1. Este script es el "T" de ETL → limpia y normaliza lo extraído.
 # 2. Manejo 3 tablas claves de un modelo estrella (Clientes, Productos, Facturas).
 # 3. Conservo CSV para trazabilidad y genero Parquet optimizado.
-# 4. El argumento "--limit" permite demos más rápidas sin necesidad de procesar todo.
-# 5. En producción, se corre sin "--limit" y procesa full datasets.
-# 6. Guardado en carpeta raíz "data/curated", separando bien capas RAW/Curated.
+# 4. En fact_Invoices ahora corrijo valores negativos con abs().
+# 5. Agrego derivadas: gross_invoice_value y profit → facilitan el modelo en BI.
+# 6. El argumento "--limit" permite demos más rápidas sin necesidad de procesar todo.
+# 7. Guardado en carpeta raíz "data/curated", separando bien capas RAW/Curated.
+# 8. **Cambio importante (data quality): Detectamos que los campos 
+#    net_invoice_value y net_invoice_cogs venían negativos desde la fuente 
+#    (probablemente por notas de crédito o diseño del sistema). 
+#    Se normalizan con ABS() para asegurar que las métricas de BI 
+#    (ventas, COGS, profit, márgenes) se calculen correctamente.**
 # ------------------------------------------------------------
