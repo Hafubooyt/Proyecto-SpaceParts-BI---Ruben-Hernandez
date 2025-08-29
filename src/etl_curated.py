@@ -194,6 +194,26 @@ for table in tables:
         logger.warning(f"[WARN] Parquet falló: {repr(e)}. Solo guardo CSV.")
         df.to_csv(curated_path_csv, index=False, encoding="utf-8-sig")
 
+    # --------------------------------------------------------
+    # Paso extra: Exportar perfilado de calidad
+    # --------------------------------------------------------
+    try:
+        # Rutas de guardado
+        profile_json_path = os.path.join(CURATED_FOLDER, f"profile_{table}.json")
+        profile_csv_path = os.path.join(CURATED_FOLDER, f"profile_{table}.csv")
+
+        # Exportar JSON
+        import json
+        with open(profile_json_path, "w", encoding="utf-8") as f:
+            json.dump(profile, f, indent=2, ensure_ascii=False)
+
+        # Exportar CSV (conviertiendo dict a DataFrame)
+        pd.DataFrame([profile]).to_csv(profile_csv_path, index=False, encoding="utf-8-sig")
+
+        logger.info(f"[OK] Perfilado exportado -> {profile_json_path}, {profile_csv_path}")
+    except Exception as e:
+        logger.warning(f"[WARN] No pude exportar perfilado de {table}: {repr(e)}")
+
 logger.info("[END] ETL curated completado correctamente.")
 
 # ------------------------------------------------------------
