@@ -1,0 +1,16 @@
+# - Archivos de Python que no subi al repo -
+__pycache__/
+*.pyc
+
+# - Mi entorno virtual -
+.venv/
+
+# - Datos -
+/data/
+
+# - Archivos de Power BI -
+*.pbix
+*.pbit
+
+# - Configuración local de VS Code -
+.vscode/
