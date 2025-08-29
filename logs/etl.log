@@ -74,3 +74,91 @@
 2025-08-29 12:04:33,999 - Main-ETL - INFO - === START LOAD PHASE ===
 2025-08-29 12:04:34,050 - Main-ETL - INFO - === LOAD PHASE COMPLETADA ===
 2025-08-29 12:04:34,050 - Main-ETL - INFO - === PIPELINE ETL COMPLETADO ===
+2025-08-29 13:36:33,576 - Main-ETL - INFO - === INICIO PIPELINE ETL - SpaceParts ===
+2025-08-29 13:36:33,577 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_spaceparts.py --limit 5000
+2025-08-29 13:36:37,071 - ETL-SpaceParts - INFO - Conexión establecida con la base: SpacePartsCoDW
+2025-08-29 13:36:37,071 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Customers (limit=5000)
+2025-08-29 13:36:38,797 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Customers.csv (filas: 3911)
+2025-08-29 13:36:38,797 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Products (limit=5000)
+2025-08-29 13:36:51,652 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Products.csv (filas: 5000)
+2025-08-29 13:36:51,652 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: fact.Invoices (limit=5000)
+2025-08-29 13:36:57,587 - ETL-SpaceParts - ERROR - [ERROR] No se pudo extraer fact.Invoices
+Traceback (most recent call last):
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_spaceparts.py", line 116, in <module>
+    df.to_csv(file_path, index=False)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Lib\site-packages\pandas\util\_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Lib\site-packages\pandas\core\generic.py", line 3986, in to_csv
+    return DataFrameRenderer(formatter).to_csv(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        path_or_buf,
+        ^^^^^^^^^^^^
+    ...<14 lines>...
+        storage_options=storage_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Lib\site-packages\pandas\io\formats\format.py", line 1014, in to_csv
+    csv_formatter.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Lib\site-packages\pandas\io\formats\csvs.py", line 251, in save
+    with get_handle(
+         ~~~~~~~~~~^
+        self.filepath_or_buffer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        storage_options=self.storage_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ) as handles:
+    ^
+  File "C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+        handle,
+    ...<3 lines>...
+        newline="",
+    )
+PermissionError: [Errno 13] Permission denied: 'data/raw\\fact_Invoices.csv'
+2025-08-29 13:36:58,005 - ETL-SpaceParts - INFO - Extracción completada con éxito para todas las tablas solicitadas
+2025-08-29 13:36:58,096 - Main-ETL - INFO - [OK] etl_spaceparts.py completado.
+2025-08-29 13:36:58,096 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_curated.py --limit 5000
+2025-08-29 13:36:58,561 - ETL-Curated - INFO - [START] Procesando dim_Customers desde data\raw\dim_Customers.csv (limit=5000)
+2025-08-29 13:36:58,603 - ETL-Curated - INFO - Perfil [dim_Customers] -> filas: 3911, columnas: 10, nulos totales: 0, duplicados: 0
+2025-08-29 13:36:58,765 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Customers_curated.csv y data\curated\dim_Customers_curated.parquet
+2025-08-29 13:36:58,765 - ETL-Curated - INFO - [START] Procesando dim_Products desde data\raw\dim_Products.csv (limit=5000)
+2025-08-29 13:36:58,860 - ETL-Curated - INFO - Perfil [dim_Products] -> filas: 5000, columnas: 18, nulos totales: 0, duplicados: 0
+2025-08-29 13:36:58,906 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Products_curated.csv y data\curated\dim_Products_curated.parquet
+2025-08-29 13:36:58,907 - ETL-Curated - INFO - [START] Procesando fact_Invoices desde data\raw\fact_Invoices.csv (limit=5000)
+2025-08-29 13:36:58,929 - ETL-Curated - INFO - Perfil [fact_Invoices] -> filas: 3000, columnas: 22, nulos totales: 0, duplicados: 0
+2025-08-29 13:36:58,962 - ETL-Curated - INFO - [OK] Guardado data\curated\fact_Invoices_curated.csv y data\curated\fact_Invoices_curated.parquet
+2025-08-29 13:36:58,962 - ETL-Curated - INFO - [END] ETL curated completado correctamente.
+2025-08-29 13:36:59,035 - Main-ETL - INFO - [OK] etl_curated.py completado.
+2025-08-29 13:36:59,035 - Main-ETL - INFO - === START LOAD PHASE ===
+2025-08-29 13:36:59,057 - Main-ETL - INFO - === LOAD PHASE COMPLETADA ===
+2025-08-29 13:36:59,058 - Main-ETL - INFO - === PIPELINE ETL COMPLETADO ===
+2025-08-29 13:37:39,415 - Main-ETL - INFO - === INICIO PIPELINE ETL - SpaceParts ===
+2025-08-29 13:37:39,415 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_spaceparts.py --limit 5000
+2025-08-29 13:37:41,974 - ETL-SpaceParts - INFO - Conexión establecida con la base: SpacePartsCoDW
+2025-08-29 13:37:41,974 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Customers (limit=5000)
+2025-08-29 13:37:49,657 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Customers.csv (filas: 3911)
+2025-08-29 13:37:49,657 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: dim.Products (limit=5000)
+2025-08-29 13:38:01,707 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\dim_Products.csv (filas: 5000)
+2025-08-29 13:38:01,707 - ETL-SpaceParts - INFO - [START] Extrayendo tabla: fact.Invoices (limit=5000)
+2025-08-29 13:38:09,999 - ETL-SpaceParts - INFO - [OK] Guardado data/raw\fact_Invoices.csv (filas: 5000)
+2025-08-29 13:38:10,363 - ETL-SpaceParts - INFO - Extracción completada con éxito para todas las tablas solicitadas
+2025-08-29 13:38:10,432 - Main-ETL - INFO - [OK] etl_spaceparts.py completado.
+2025-08-29 13:38:10,432 - Main-ETL - INFO - Ejecutando: C:\Users\PC\OneDrive\Desktop\spaceparts-bi\.venv\Scripts\python.exe C:\Users\PC\OneDrive\Desktop\spaceparts-bi\src\etl_curated.py --limit 5000
+2025-08-29 13:38:10,910 - ETL-Curated - INFO - [START] Procesando dim_Customers desde data\raw\dim_Customers.csv (limit=5000)
+2025-08-29 13:38:10,935 - ETL-Curated - INFO - Perfil [dim_Customers] -> filas: 3911, columnas: 10, nulos totales: 0, duplicados: 0
+2025-08-29 13:38:10,971 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Customers_curated.csv y data\curated\dim_Customers_curated.parquet
+2025-08-29 13:38:10,971 - ETL-Curated - INFO - [START] Procesando dim_Products desde data\raw\dim_Products.csv (limit=5000)
+2025-08-29 13:38:11,055 - ETL-Curated - INFO - Perfil [dim_Products] -> filas: 5000, columnas: 18, nulos totales: 0, duplicados: 0
+2025-08-29 13:38:11,097 - ETL-Curated - INFO - [OK] Guardado data\curated\dim_Products_curated.csv y data\curated\dim_Products_curated.parquet
+2025-08-29 13:38:11,097 - ETL-Curated - INFO - [START] Procesando fact_Invoices desde data\raw\fact_Invoices.csv (limit=5000)
+2025-08-29 13:38:11,125 - ETL-Curated - INFO - Perfil [fact_Invoices] -> filas: 5000, columnas: 22, nulos totales: 0, duplicados: 0
+2025-08-29 13:38:11,174 - ETL-Curated - INFO - [OK] Guardado data\curated\fact_Invoices_curated.csv y data\curated\fact_Invoices_curated.parquet
+2025-08-29 13:38:11,174 - ETL-Curated - INFO - [END] ETL curated completado correctamente.
+2025-08-29 13:38:11,254 - Main-ETL - INFO - [OK] etl_curated.py completado.
+2025-08-29 13:38:11,254 - Main-ETL - INFO - === START LOAD PHASE ===
+2025-08-29 13:38:11,273 - Main-ETL - INFO - === LOAD PHASE COMPLETADA ===
+2025-08-29 13:38:11,273 - Main-ETL - INFO - === PIPELINE ETL COMPLETADO ===
