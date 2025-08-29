@@ -34,3 +34,5 @@ El objetivo es simular el trabajo de un **Analista BI**, pasando por todas las f
 
 ---
 
+## Nota de prueba
+Este es un commit de prueba para demostrar el control de versiones en Git.
